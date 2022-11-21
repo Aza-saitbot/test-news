@@ -1,0 +1,19 @@
+.news{
+  background-color: yellow;
+  display: grid;
+  grid-template-rows: 1fr 80px;
+
+  padding: 0 10px;
+
+  &__list{
+    display: flex;
+    flex-direction: column;
+    height: 380px;
+    overflow-y: scroll;
+
+    &__item{
+
+    }
+  }
+
+}
