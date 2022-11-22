@@ -4,6 +4,7 @@ import {getNews} from "../../api/getNews";
 import {INew} from "../../types/types";
 import Paginator from "../../components/Paginator/Paginator";
 import New from "../new/New";
+import Loader from "../../components/Loader/Loader";
 
 const News = () => {
     const [list,setList]=useState<Array<INew>>([])
@@ -28,13 +29,11 @@ const News = () => {
     }
 
     useEffect(()=>{
-        onPageChanged(page,pageSize)
+        onPageChanged(1,25)
     },[])
 
     if (loader){
-        return <div style={{
-            display:"grid",alignItems:"center",justifyItems:"center"
-        }}>Загрузка...</div>
+        return <Loader/>
     }
 
     return (
