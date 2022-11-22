@@ -12,12 +12,8 @@ type PropsType={
 
 const Paginator:React.FC<PropsType> = ({totalItemsCount, pageSize,
                                          currentPage, onPageChanged,
-                                         portionSize = 10}) => {
-
-    /*после полученного запрос из сервера о данных о кол-ве totalItemsCount зарег-х пол-ей на хостинге
-    записываем в стор и направляем с указанной нами в сторе о количестве нужной стр pageSize
-       дальше делим общ кол-во юзеров на размер страницы в итоге получаем
-       Общее кол-во страниц, для отображения в браузере */
+                                         portionSize = 10
+}) => {
 
     let pagesCount = Math.ceil(totalItemsCount / pageSize);
 
@@ -38,29 +34,41 @@ const Paginator:React.FC<PropsType> = ({totalItemsCount, pageSize,
     const leftPortionPageNumber = (portionNumber - 1) * portionSize + 1;
     const rightPortionPageNumber = portionNumber * portionSize;
 
-
     return (
-        <div className='paginator'>
-            {portionNumber > 1 &&
-                <button className='paginator__button' onClick={() => {
-                    setPortionNumber(portionNumber - 1)
-                }}>Prev</button>}
-            {pages
-                .filter(p => p >= leftPortionPageNumber && p <= rightPortionPageNumber)
-                .map((p) => {
-                    return <span className={`paginator__pageNumber ${currentPage ? 'selectedPage' : ''}`}
-                                 key={p}
-                                 onClick={(e) => {
-                                     onPageChanged(p,pageSize);
-                                 }}>{p}</span>
-                })
-            }
+       <div className='paginator'>
+           <div className='paginator__block'>
+               {portionNumber > 1 &&
+                   <button className='paginator__block__button' onClick={() => {
+                       setPortionNumber(portionNumber - 1)
+                   }}>Prev</button>}
+               {pages
+                   .filter(p => p >= leftPortionPageNumber && p <= rightPortionPageNumber)
+                   .map((p) => {
+                       return <span className={`paginator__block__pageNumber ${currentPage === p ? 'selectedPage' : ''}`}
+                                    key={p}
+                                    onClick={() => {
+                                        onPageChanged(p,pageSize);
+                                    }}>{p}</span>
+                   })
+               }
 
-            {portionCount > portionNumber &&
-                <button onClick={() => {
-                    setPortionNumber(portionNumber + 1)
-                }} className='paginator__button'>Next</button>}
-        </div>
+               {portionCount > portionNumber &&
+                   <button onClick={() => {
+                       setPortionNumber(portionNumber + 1)
+                   }} className='paginator__block__button'>Next</button>}
+           </div>
+           <div className='paginator__pageSize'>
+               <select
+                   value={pageSize}
+                   onChange={e=>onPageChanged(1,Number(e.target.value))}
+                   >
+                   <option value={25}>25</option>
+                   <option value={50}>50</option>
+                   <option value={75}>75</option>
+                   <option value={100}>100</option>
+               </select>
+           </div>
+       </div>
     )
 }
 export default Paginator;

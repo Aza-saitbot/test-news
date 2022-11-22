@@ -1,9 +1,25 @@
-import React from 'react';
+import React, {FC} from 'react';
+import {INew} from "../../types/types";
 
-const New = () => {
+const noImage='https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
+
+type NewProps={
+    item:INew
+}
+const New:FC<NewProps> = ({ item}) => {
     return (
-        <div className='new'>
-            https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_675,pg_1,q_80,w_1200/2c42754cba869474fc09bfdc3c80a7e1.jpg
+        <div  className='news__list__item'>
+            <div className="news__list__item__title">{item.author ? item.author:'Имя автора не указана'}</div>
+            <div className="news__list__item__image">
+                <img
+                    src={item.urlToImage}
+                    onError={({ currentTarget }) => {
+                        currentTarget.onerror = null;
+                        currentTarget.src=noImage;
+                    }}
+                    alt="Картинка" />
+            </div>
+            <div className="news__list__item__description">{item.description}</div>
         </div>
     );
 };

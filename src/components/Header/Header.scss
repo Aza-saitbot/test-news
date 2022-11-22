@@ -1,5 +1,20 @@
 .header{
-  display: grid;
-  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  column-gap: 25px;
+  background-color: #50b5ff;
+  padding: 15px 50px;
+  color: white;
+
+  &__listRef{
+    display: flex;
+    align-items: center;
+    column-gap: 25px;
+    color: white;
+
+    a{
+      color: white;
+    }
+  }
 
 }

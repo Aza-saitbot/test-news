@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiKey = '7f3deed720e24f85a00575ec0a6374fb';
+const apiKey = '376476a703354cc8ab9a83635dd11c49';
 
 const Axios = axios.create({
     baseURL: 'https://newsapi.org',

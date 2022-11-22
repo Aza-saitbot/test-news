@@ -3,45 +3,53 @@ import './News.scss'
 import {getNews} from "../../api/getNews";
 import {INew} from "../../types/types";
 import Paginator from "../../components/Paginator/Paginator";
-
+import New from "../new/New";
 
 const News = () => {
     const [list,setList]=useState<Array<INew>>([])
-    const [pageSize,setPageSize]=useState(20)
-    const [currentPage,setCurrentPage]=useState(1)
+    const [pageSize,setPageSize]=useState(25)
+    const [page,setPage]=useState(1)
     const [totalItemsCount,setTotalItemsCount]=useState(0)
-console.log('list',list)
-
-    const onPageChanged = (currentPage: number) => {
-        getNews({currentPage, pageSize}).then(data => {
-            setList(data.data.articles)
-            setTotalItemsCount(data.data.totalResults)
-        })
+    const [loader,setLoader]=useState(false)
+    
+    const onPageChanged = async (page:number, pageSize:number) => {
+        setLoader(true)
+       try {
+           setPage(page)
+           setPageSize(pageSize)
+           const {data} = await getNews({page, pageSize})
+           setList(data.articles)
+           setTotalItemsCount(data.totalResults)
+       }catch (e) {
+           alert('Ошибка - Новые статьи доступны с задержкой в 1 час, у бесплатного аккаунта api, есть ограничения :(')
+       }finally {
+           setLoader(false)
+       }
     }
 
     useEffect(()=>{
-        getNews({pageSize,currentPage}).then(data => {
-            setList(data.data.articles)
-            setTotalItemsCount(data.data.totalResults)
-        })
+        onPageChanged(page,pageSize)
     },[])
+
+    if (loader){
+        return <div style={{
+            display:"grid",alignItems:"center",justifyItems:"center"
+        }}>Загрузка...</div>
+    }
 
     return (
         <div className='news'>
             <div className='news__list'>
                 {list.map((item,index) =>
-                    <div key={`${item.author}-${index}`} className='news__list__item'>
-                        `${item.author}-${index}`
-                    </div>
+                   <New key={`${item.author}-${index}`} item={item}/>
                 )}
             </div>
-            <div className='news__pagination'>
                 <Paginator
                     totalItemsCount={totalItemsCount}
                     pageSize={pageSize}
-                    currentPage={currentPage}
-                    onPageChanged={onPageChanged}/>
-            </div>
+                    currentPage={page}
+                    onPageChanged={onPageChanged}
+                />
         </div>
     );
 };
